@@ -5,3 +5,4 @@ node_modules/
 # Data input besar milik data/kbbi-data — jangan commit di sini
 *.dic
 kbbi_pemenggalan.txt
+.idea/
