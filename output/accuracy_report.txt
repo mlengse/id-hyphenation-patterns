@@ -1,0 +1,5 @@
+Ground truth: 72659
+Current: 48152/72659 (66.27%)
+Generated: 72180/72659 (99.34%)
+
+=== REGRESSIONS ===
