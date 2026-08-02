@@ -1,6 +1,6 @@
 // Indonesian hyphenation patterns for hypher
 // Generated from KBBI 2025 data via orthos pipeline (id-hyphenation-patterns)
-// Patterns: 11443, Exceptions: 6916, generated 2026-07-31
+// Patterns: 11443, Exceptions: 6916, generated 2026-08-02
 // Converted by convert_engine_format.js (anchors "." -> "_", exceptions "-" -> U+2027)
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {

@@ -173,22 +173,24 @@ def convert_to_hyphen_js(patterns, exceptions, output_file):
 
 def write_hypher_format(patterns, exceptions, output_file):
     """Write patterns in hypher library format with grouped patterns."""
-    # Group patterns by character length
     grouped = {}
-    for p in patterns:
-        letters = re.sub(r'[0-9]', '', p.replace('.', ''))
-        length = len(letters)
+    for raw_p in patterns:
+        p = raw_p
+        if p.startswith('.'):
+            p = '_' + p[1:]
+        if p.endswith('.'):
+            p = p[:-1] + '_'
+        length = len(p)
         if length not in grouped:
             grouped[length] = []
         grouped[length].append(p)
     
-    # Build pattern object as required by hypher
     pattern_obj = {}
-    for length, pats in sorted(grouped.items()):
-        pattern_obj[length] = ''.join(pats)
+    for length in sorted(grouped.keys()):
+        pattern_obj[str(length)] = ''.join(grouped[length])
     
-    # Hypher expects exceptions as string with special separator
-    exception_str = ','.join(exceptions[:5000])
+    hypher_exceptions = [e.replace('-', '\u2027') for e in exceptions if e]
+    exception_str = ','.join(hypher_exceptions)
     
     js_content = '''// Indonesian hyphenation patterns for hypher
 // Generated from KBBI via orthos.js
@@ -208,7 +210,7 @@ def write_hypher_format(patterns, exceptions, output_file):
     leftmin: 2,
     rightmin: 2,
     patterns: ''' + json.dumps(pattern_obj, ensure_ascii=False) + ''',
-    exceptions: "''' + exception_str + '''"
+    exceptions: ''' + json.dumps(exception_str, ensure_ascii=False) + '''
   };
 });
 '''
@@ -219,64 +221,85 @@ def write_hypher_format(patterns, exceptions, output_file):
 
 def write_hyphenation_patterns_format(patterns, exceptions, output_file):
     """Write patterns in hyphenation-patterns library format."""
-    # Group patterns by length
     grouped = {}
-    for p in patterns:
-        letters = re.sub(r'[0-9]', '', p.replace('.', ''))
-        length = len(letters)
+    for raw_p in patterns:
+        p = raw_p
+        if p.startswith('.'):
+            p = '_' + p[1:]
+        if p.endswith('.'):
+            p = p[:-1] + '_'
+        length = len(p)
         if length not in grouped:
             grouped[length] = []
         grouped[length].append(p)
     
-    js_lines = [
-        "module.exports = {",
-        "\t'id': 'id',",
-        "\t'leftmin': 2,",
-        "\t'rightmin': 2,",
-        "\t'patterns': {"
-    ]
-    
+    pattern_obj = {}
     for length in sorted(grouped.keys()):
-        pats = ''.join(grouped[length])
-        js_lines.append(f'\t\t{length}: "{pats}",')
+        pattern_obj[str(length)] = ''.join(grouped[length])
     
-    # Remove trailing comma from last pattern line
-    if js_lines[-1].endswith(','):
-        js_lines[-1] = js_lines[-1][:-1]
-    
-    js_lines.append("\t}")
-    js_lines.append("};")
-    
+    hypher_exceptions = [e.replace('-', '\u2027') for e in exceptions if e]
+    exception_str = ','.join(hypher_exceptions)
+
+    date = datetime.now().strftime("%Y-%m-%d")
+    js_content = f"""// Hyphenation patterns for Bahasa Indonesia (hypher format)
+// Generated from KBBI 2025 data via orthos pipeline (id-hyphenation-patterns)
+// Patterns: {len(patterns)}, Exceptions: {len(exceptions)}, generated {date}
+// Converted by generate_all_formats.py (anchors "." -> "_", exceptions "-" -> U+2027)
+(function (root, factory) {{
+  if (typeof define === "function" && define.amd) {{
+    define([], factory);
+  }} else if (typeof module === "object" && module.exports) {{
+    module.exports = factory();
+  }} else {{
+    root.Hypher = root.Hypher || {{}};
+    root.Hypher.languages = root.Hypher.languages || {{}};
+    root.Hypher.languages["id"] = factory();
+  }}
+}})(this, function () {{
+  return {{
+    id: "id",
+    leftmin: 2,
+    rightmin: 2,
+    patterns: {json.dumps(pattern_obj, ensure_ascii=False)},
+    exceptions: {json.dumps(exception_str, ensure_ascii=False)}
+  }};
+}});
+"""
     with open(output_file, 'w', encoding='utf-8', newline='\n') as f:
-        f.write('\n'.join(js_lines) + '\n')
+        f.write(js_content)
     print(f"Written hyphenation-patterns JS: {output_file}")
 
 def write_hyphenopoly_json(patterns, exceptions, output_file):
     """Write patterns in Hyphenopoly JSON format."""
-    # Group patterns by length
     grouped = {}
-    for p in patterns:
-        letters = re.sub(r'[0-9]', '', p.replace('.', ''))
-        length = len(letters)
+    for raw_p in patterns:
+        p = raw_p
+        if p.startswith('.'):
+            p = '_' + p[1:]
+        if p.endswith('.'):
+            p = p[:-1] + '_'
+        length = len(p)
         if length not in grouped:
             grouped[length] = []
         grouped[length].append(p)
     
-    # Build pattern object
     pattern_obj = {}
-    for length, pats in sorted(grouped.items()):
-        pattern_obj[str(length)] = ''.join(pats)
+    for length in sorted(grouped.keys()):
+        pattern_obj[str(length)] = ''.join(grouped[length])
+    
+    hypher_exceptions = [e.replace('-', '\u2027') for e in exceptions if e]
     
     data = {
         "leftmin": 2,
         "rightmin": 2,
         "patterns": pattern_obj,
-        "exceptions": ','.join(exceptions[:5000])
+        "exceptions": ','.join(hypher_exceptions)
     }
     
     with open(output_file, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     print(f"Written Hyphenopoly JSON: {output_file}")
+
 
 def main():
     pattern_file = os.path.join('output', 'hyph-id.pat.txt')
