@@ -23,7 +23,7 @@ let currentPattern;
 try {
   currentPattern = require('hyphenation-patterns/patterns/id.js');
 } catch (e) {
-  const fallbackPath = path.join(__dirname, '..', '..', '..', 'engine', 'hypher', 'lib', 'patterns', 'id.js');
+  const fallbackPath = path.join(__dirname, '..', '..', 'hyphenation-patterns', 'patterns', 'id.js');
   currentPattern = fs.existsSync(fallbackPath) ? require(fallbackPath) : require(path.join(__dirname, '..', 'output', 'hypher-id.js'));
 }
 

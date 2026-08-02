@@ -49,7 +49,7 @@ function checkPatternFiles() {
     const candidates = [
         { lib: 'hyphen (JS)', resolve: () => resolvePathOrPkg('hyphen/patterns/id.js', '../../../engine/hyphen/patterns/id.js') },
         { lib: 'hyphen (TeX)', resolve: () => resolvePathOrPkg('', '../../../engine/hyphen/tex/hyph-id.tex') },
-        { lib: 'hypher', resolve: () => resolvePathOrPkg('hypher/lib/patterns/id.js', '../../../engine/hypher/lib/patterns/id.js') },
+        { lib: 'hypher', resolve: () => resolvePathOrPkg('hyphenation-patterns/patterns/id.js', '../../hyphenation-patterns/patterns/id.js') },
         { lib: 'hyphenation-patterns', resolve: () => resolvePathOrPkg('hyphenation-patterns/patterns/id.js', '../../hyphenation-patterns/patterns/id.js') },
         { lib: 'Hyphenopoly (WASM)', resolve: () => resolvePathOrPkg('hyphenopoly/lang/id/id.wasm', '../../../engine/Hyphenopoly/lang/id/id.wasm') },
         { lib: 'Hyphenopoly (min WASM)', resolve: () => resolvePathOrPkg('hyphenopoly/docs/min/patterns/id.wasm', '../../../engine/Hyphenopoly/docs/min/patterns/id.wasm') },
@@ -108,7 +108,7 @@ function testHypherFormat() {
     console.log('='.repeat(60));
     
     try {
-        const patternPath = resolvePathOrPkg('hypher/lib/patterns/id.js', '../../../engine/hypher/lib/patterns/id.js') || path.join(__dirname, '..', 'output', 'hypher-id.js');
+        const patternPath = resolvePathOrPkg('hyphenation-patterns/patterns/id.js', '../../hyphenation-patterns/patterns/id.js') || path.join(__dirname, '..', 'output', 'hypher-id.js');
         
         if (!fs.existsSync(patternPath)) {
             console.log('  ⚠ id.js not found');

@@ -8,9 +8,10 @@
  * 3. Hyphenopoly (repo: github:mlengse/Hyphenopoly / npm: hyphenopoly)
  *
  * Evaluated across Pattern Sources:
- * - hyphenation-patterns (repo: github:mlengse/hyphenation-patterns - standard baseline)
- * - id-hyphenation-patterns (repo: github:mlengse/id-hyphenation-patterns - updated KBBI / EYD V)
- * - hypher lib/patterns/id.js (shipped engine patterns - what `hypher` actually publishes)
+ * - hyphenation-patterns (repo: github:mlengse/hyphenation-patterns - the published pattern, shipped to hypher users)
+ * - id-hyphenation-patterns (repo: github:mlengse/id-hyphenation-patterns - pipeline raw output)
+ * The hypher-format Indonesian pattern is published via the hyphenation-patterns
+ * repo (engine/hypher is engine-only and ships no patterns).
  *
  * EYD V violations are now split into two classes based on the ground truth:
  * - "genuine": the illegal internal split does NOT appear in KBBI ground truth.
@@ -416,15 +417,12 @@ async function main() {
   const stdWasmPath = resolveHyphenopolyWasmPath(false);
   const minWasmPath = resolveHyphenopolyWasmPath(true);
 
-  // A-1: the patterns actually shipped inside the hypher engine package
-  const shippedHypherPath = path.resolve(BAHASA_ROOT, 'engine', 'hypher', 'lib', 'patterns', 'id.js');
-
   // Define Matrix Configurations
   const configs = [
     {
       configName: 'hypher + hyphenation-patterns',
       engineName: 'hypher',
-      patternSourceName: 'hyphenation-patterns (github:mlengse/hyphenation-patterns)',
+      patternSourceName: 'hyphenation-patterns/patterns/id.js (published npm package, synced from convert_engine_format.js)',
       patternPath: stdPatternPath,
       getFn: () => createHypherInstance(stdPatternPath)
     },
@@ -434,13 +432,6 @@ async function main() {
       patternSourceName: 'id-hyphenation-patterns (github:mlengse/id-hyphenation-patterns)',
       patternPath: path.join(BASE_DIR, 'output', 'hypher-id.js'),
       getFn: () => createHypherInstance(path.join(BASE_DIR, 'output', 'hypher-id.js'))
-    },
-    {
-      configName: 'hypher + engine (shipped)',
-      engineName: 'hypher',
-      patternSourceName: 'hypher lib/patterns/id.js (shipped in engine/hypher)',
-      patternPath: shippedHypherPath,
-      getFn: () => createHypherInstance(shippedHypherPath)
     },
     {
       configName: 'hyphen + hyphenation-patterns',
@@ -544,7 +535,7 @@ async function main() {
   md += `### 4.1 \`hypher\` (\`github:mlengse/hypher\`)
 - **Performance**: High throughput (~250,000 - 280,000 words/second).
 - **Pattern Compatibility**: Native support for JSON pattern objects with \`leftmin\` / \`rightmin\` boundaries.
-- **Shipped patterns**: \`lib/patterns/id.js\` — the default patterns bundled with the \`hypher\` npm package.
+- **Shipped patterns**: \`hyphenation-patterns/patterns/id.js\` — the Indonesian pattern published via the \`hyphenation-patterns\` npm package (synced from \`convert_engine_format.js\`); \`hypher\` itself ships no patterns.
 
 ### 4.2 \`hyphen\` (\`github:mlengse/hyphen\`)
 - **Performance**: Extremely fast execution (~150,000 - 290,000 words/second).

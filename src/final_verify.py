@@ -50,12 +50,6 @@ def main():
             "min_size": 800000
         },
         {
-            "library": "hypher",
-            "file": "hypher/lib/patterns/id.js",
-            "marker": "KBBI 2025",
-            "min_size": 20000
-        },
-        {
             "library": "hyphenation-patterns",
             "file": "hyphenation-patterns/patterns/id.js",
             "marker": "leftmin",
@@ -111,11 +105,10 @@ def main():
         print("  1. hyphen/tex/hyph-id.tex")
         print("  2. tex-hyphen/.../hyph-id.pat.txt")
         print("  3. tex-hyphen/.../hyph-id.tex")
-        print("  4. hypher/lib/patterns/id.js")
-        print("  5. hyphenation-patterns/patterns/id.js")
-        print("  6. Hyphenopoly/lang/id/src/id.json")
-        print("  7. Hyphenopoly/lang/id/id.wasm")
-        print("  8. Hyphenopoly/patterns/id.wasm")
+        print("  4. hyphenation-patterns/patterns/id.js")
+        print("  5. Hyphenopoly/lang/id/src/id.json")
+        print("  6. Hyphenopoly/lang/id/id.wasm")
+        print("  7. Hyphenopoly/patterns/id.wasm")
     else:
         print("\n❌ SOME LIBRARIES NEED ATTENTION")
     

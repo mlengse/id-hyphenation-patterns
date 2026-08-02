@@ -96,7 +96,6 @@ Updated library files:
   ✓ hyphen/tex/hyph-id.tex
   ✓ tex-hyphen/.../hyph-id.pat.txt
   ✓ tex-hyphen/.../hyph-id.tex
-  ✓ hypher/lib/patterns/id.js
   ✓ hyphenation-patterns/patterns/id.js
   
 Pending:

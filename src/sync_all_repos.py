@@ -4,8 +4,13 @@ sync_all_repos.py
 
 Synchronizes single source of truth (SSOT) hyphenation pattern outputs
 from id-hyphenation-patterns/output to upstream repositories:
-1. tex-hyphen (TeX Live / CTAN)
-2. hyphenation-patterns (NPM / JS package)
+1. tex-hyphen (TeX Live / CTAN)   — from generate_all_formats.py outputs
+2. hyphenation-patterns (NPM / JS) — from convert_engine_format.js -> output/engine/id.cjs.js
+
+The JS/hypher-format Indonesian pattern lives in the hyphenation-patterns repo
+(engine/hypher is engine-only and ships no patterns). convert_engine_format.js is
+the single source for it: it applies the manual overrides
+(rules/exceptions_overrides.txt) that generate_all_formats.py does not.
 """
 
 import os
@@ -66,11 +71,15 @@ def sync_hyphenation_patterns():
         print(f"  Warning: {HYPHENATION_PATTERNS_DIR} does not exist. Skipping.")
         return False
 
-    src_js = OUTPUT_DIR / "hyphenation-patterns-id.js"
+    # Single source with overrides: convert_engine_format.js -> output/engine/id.cjs.js.
+    # Plain `module.exports = {...}` matches the hyphenation-patterns repo convention
+    # (see patterns/en-us.js) and is what the dist/browser build concatenates.
+    src_js = OUTPUT_DIR / "engine" / "id.cjs.js"
     dst_js = HYPHENATION_PATTERNS_DIR / "patterns" / "id.js"
 
     if not src_js.exists():
         print(f"  [FAIL] Error: Source file {src_js.name} missing!")
+        print("  Run convert_engine_format.js first.")
         return False
 
     shutil.copy2(src_js, dst_js)
