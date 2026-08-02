@@ -1,5 +1,5 @@
 Ground truth: 72659
-Current: 48152/72659 (66.27%)
-Generated: 72180/72659 (99.34%)
+Current: 72188/72659 (99.35%)
+Generated: 72167/72659 (99.32%)
 
 === REGRESSIONS ===

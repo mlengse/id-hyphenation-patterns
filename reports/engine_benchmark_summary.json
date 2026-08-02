@@ -1,0 +1,138 @@
+{
+  "timestamp": "2026-08-02T19:08:03.887Z",
+  "totalGroundTruthWords": 72659,
+  "results": [
+    {
+      "configName": "hypher + hyphenation-patterns",
+      "engineName": "hypher",
+      "patternSourceName": "hyphenation-patterns (github:mlengse/hyphenation-patterns)",
+      "initTimeMs": 47.86,
+      "totalTimeSec": 0.3622,
+      "wordsPerSec": 200590,
+      "latencyPerWordUs": 4.99,
+      "totalWords": 72659,
+      "exactMatches": 72167,
+      "exactAccuracyPct": 99.32,
+      "precision": 0.999,
+      "recall": 0.9954,
+      "f1Score": 0.9972,
+      "eydViolations": {
+        "monoftong": 230,
+        "diftong": 1415,
+        "digraf": 381,
+        "total": 2026
+      },
+      "patternFileSizeKB": 184.6
+    },
+    {
+      "configName": "hypher + id-hyphenation-patterns",
+      "engineName": "hypher",
+      "patternSourceName": "id-hyphenation-patterns (github:mlengse/id-hyphenation-patterns)",
+      "initTimeMs": 27.42,
+      "totalTimeSec": 0.2848,
+      "wordsPerSec": 255078,
+      "latencyPerWordUs": 3.92,
+      "totalWords": 72659,
+      "exactMatches": 72167,
+      "exactAccuracyPct": 99.32,
+      "precision": 0.999,
+      "recall": 0.9954,
+      "f1Score": 0.9972,
+      "eydViolations": {
+        "monoftong": 230,
+        "diftong": 1415,
+        "digraf": 381,
+        "total": 2026
+      },
+      "patternFileSizeKB": 184.4
+    },
+    {
+      "configName": "hyphen + hyphenation-patterns",
+      "engineName": "hyphen",
+      "patternSourceName": "hyphenation-patterns (github:mlengse/hyphenation-patterns)",
+      "initTimeMs": 218.29,
+      "totalTimeSec": 0.2848,
+      "wordsPerSec": 255144,
+      "latencyPerWordUs": 3.92,
+      "totalWords": 72659,
+      "exactMatches": 69063,
+      "exactAccuracyPct": 95.05,
+      "precision": 0.9989,
+      "recall": 0.9764,
+      "f1Score": 0.9876,
+      "eydViolations": {
+        "monoftong": 230,
+        "diftong": 1271,
+        "digraf": 408,
+        "total": 1909
+      },
+      "patternFileSizeKB": 1650.7
+    },
+    {
+      "configName": "hyphen + id-hyphenation-patterns",
+      "engineName": "hyphen",
+      "patternSourceName": "id-hyphenation-patterns (github:mlengse/id-hyphenation-patterns)",
+      "initTimeMs": 627.43,
+      "totalTimeSec": 0.5038,
+      "wordsPerSec": 144221,
+      "latencyPerWordUs": 6.93,
+      "totalWords": 72659,
+      "exactMatches": 69069,
+      "exactAccuracyPct": 95.06,
+      "precision": 0.9991,
+      "recall": 0.9766,
+      "f1Score": 0.9877,
+      "eydViolations": {
+        "monoftong": 229,
+        "diftong": 1268,
+        "digraf": 380,
+        "total": 1877
+      },
+      "patternFileSizeKB": 156.4
+    },
+    {
+      "configName": "Hyphenopoly + hyphenation-patterns",
+      "engineName": "Hyphenopoly",
+      "patternSourceName": "hyphenation-patterns (github:mlengse/Hyphenopoly WASM)",
+      "initTimeMs": 18.93,
+      "totalTimeSec": 0.504,
+      "wordsPerSec": 144173,
+      "latencyPerWordUs": 6.94,
+      "totalWords": 72659,
+      "exactMatches": 60232,
+      "exactAccuracyPct": 82.9,
+      "precision": 0.9992,
+      "recall": 0.9208,
+      "f1Score": 0.9584,
+      "eydViolations": {
+        "monoftong": 223,
+        "diftong": 1196,
+        "digraf": 378,
+        "total": 1797
+      },
+      "patternFileSizeKB": 127.5
+    },
+    {
+      "configName": "Hyphenopoly + id-hyphenation-patterns",
+      "engineName": "Hyphenopoly",
+      "patternSourceName": "id-hyphenation-patterns (github:mlengse/Hyphenopoly min WASM)",
+      "initTimeMs": 21.09,
+      "totalTimeSec": 0.1301,
+      "wordsPerSec": 558342,
+      "latencyPerWordUs": 1.79,
+      "totalWords": 72659,
+      "exactMatches": 60232,
+      "exactAccuracyPct": 82.9,
+      "precision": 0.9992,
+      "recall": 0.9208,
+      "f1Score": 0.9584,
+      "eydViolations": {
+        "monoftong": 223,
+        "diftong": 1196,
+        "digraf": 378,
+        "total": 1797
+      },
+      "patternFileSizeKB": 2.7
+    }
+  ]
+}

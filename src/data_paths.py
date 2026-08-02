@@ -2,13 +2,7 @@
 """
 Shared workspace paths for the id-hyphenation-patterns pipeline.
 
-All scripts should import DATA, OUTPUT etc. from here instead of hardcoding
-relative paths, so the pipeline keeps working as the workspace evolves.
-
-Layout (relative to this file, src/):
-    src/../..                 = pattern/               (sibling repos)
-    src/../../..              = dev/bahasa/
-    src/../../.. /data/kbbi-harvester-cdn/hyphenation  = pinned input data
+Provides fallback resolution for dictionary data paths from output/ or GitHub.
 """
 
 from pathlib import Path
@@ -18,10 +12,13 @@ ROOT = SRC.parent
 OUTPUT = ROOT / 'output'
 RULES = ROOT / 'rules'
 
-BAHASA = SRC.parents[2]
-DATA = BAHASA / 'data' / 'kbbi-harvester-cdn' / 'hyphenation'
+# Check workspace location or local output fallbacks
+BAHASA = SRC.parents[2] if len(SRC.parents) > 2 else ROOT
+DATA_EXT = BAHASA / 'data' / 'kbbi-harvester-cdn' / 'hyphenation'
 
-ID_DIC = DATA / 'id.dic'
-ID_ORTHOS_DIC = DATA / 'id_orthos.dic'
-ID_WORDS_DIC = DATA / 'id_words.dic'
-PEMENGGALAN_TXT = DATA / 'kbbi_pemenggalan.txt'
+DATA = DATA_EXT if DATA_EXT.exists() else OUTPUT
+
+ID_DIC = DATA / 'id.dic' if (DATA / 'id.dic').exists() else (OUTPUT / 'indonesia_clean.dic')
+ID_ORTHOS_DIC = DATA / 'id_orthos.dic' if (DATA / 'id_orthos.dic').exists() else (OUTPUT / 'indonesia_pure.dic')
+ID_WORDS_DIC = DATA / 'id_words.dic' if (DATA / 'id_words.dic').exists() else (OUTPUT / 'indonesia_training.dic')
+PEMENGGALAN_TXT = DATA / 'kbbi_pemenggalan.txt' if (DATA / 'kbbi_pemenggalan.txt').exists() else (OUTPUT / 'ground_truth.txt')

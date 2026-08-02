@@ -12,7 +12,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const DEFAULT_DIR = 'C:\\Users\\aknpa\\dev\\bahasa\\data\\kbbi-harvester-cdn\\word-details';
+const DEFAULT_DIR = path.join(__dirname, '..', '..', '..', 'data', 'kbbi-harvester-cdn', 'word-details');
 const OUT_FILE = path.join(__dirname, '..', 'output', 'ground_truth.txt');
 
 function walk(dir) {

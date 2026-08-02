@@ -28,12 +28,14 @@ import subprocess
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Any
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-PATGEN_TRAIN_DIR = BASE_DIR / "patgen-train-colab"
-ORTHOS_JS_DIR = BASE_DIR / "orthos"
-KBBI_DATA_PATH = Path(r"C:\Users\aknpa\dev\bahasa\data\kbbi-harvester-cdn\hyphenation\kbbi_vi_hyphenation_dict.json")
-OUTPUT_DIR = BASE_DIR / "benchmarks" / "output"
-REPORTS_DIR = BASE_DIR / "benchmarks" / "reports"
+BASE_DIR = Path(__file__).resolve().parent
+PATGEN_TRAIN_DIR = BASE_DIR.parent / "patgen-train-colab"
+ORTHOS_JS_DIR = BASE_DIR.parent / "orthos"
+KBBI_DATA_PATH = BASE_DIR / "output" / "ground_truth.txt"
+if not KBBI_DATA_PATH.exists():
+    KBBI_DATA_PATH = BASE_DIR.parent.parent / "data" / "kbbi-harvester-cdn" / "hyphenation" / "kbbi_vi_hyphenation_dict.json"
+OUTPUT_DIR = BASE_DIR / "reports"
+REPORTS_DIR = BASE_DIR / "reports"
 
 sys.path.insert(0, str(PATGEN_TRAIN_DIR))
 

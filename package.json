@@ -1,0 +1,34 @@
+{
+  "name": "id-hyphenation-patterns",
+  "version": "1.0.0",
+  "description": "Indonesian Hyphenation Pattern Training, Validation & Benchmark Suite",
+  "main": "src/benchmark_engines_suite.js",
+  "type": "commonjs",
+  "scripts": {
+    "benchmark": "node src/benchmark_engines_suite.js",
+    "test": "node src/test_all_libraries.js",
+    "compare": "node src/compare_accuracy.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mlengse/id-hyphenation-patterns.git"
+  },
+  "keywords": [
+    "hyphenation",
+    "indonesian",
+    "eyd-v",
+    "kbbi",
+    "hypher",
+    "hyphen",
+    "hyphenopoly",
+    "tex-hyphen"
+  ],
+  "author": "mLengse",
+  "license": "MIT",
+  "dependencies": {
+    "hyphen": "github:mlengse/hyphen",
+    "hyphenopoly": "github:mlengse/Hyphenopoly",
+    "hypher": "github:mlengse/hypher",
+    "hyphenation-patterns": "github:mlengse/hyphenation-patterns"
+  }
+}

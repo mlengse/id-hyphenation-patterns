@@ -12,13 +12,25 @@
 const fs = require('fs');
 const path = require('path');
 
-const ENGINE_HYPHER = path.join(__dirname, '..', '..', '..', 'engine', 'hypher', 'lib', 'hypher.js');
-const CURRENT_ID = path.join(__dirname, '..', '..', '..', 'engine', 'hypher', 'lib', 'patterns', 'id.js');
-const GEN_ID = path.join(__dirname, '..', 'output', 'engine', 'id.js');
+let Hypher;
+try {
+  Hypher = require('hypher');
+} catch (e) {
+  Hypher = require(path.join(__dirname, '..', '..', '..', 'engine', 'hypher', 'lib', 'hypher.js'));
+}
+
+let currentPattern;
+try {
+  currentPattern = require('hyphenation-patterns/patterns/id.js');
+} catch (e) {
+  const fallbackPath = path.join(__dirname, '..', '..', '..', 'engine', 'hypher', 'lib', 'patterns', 'id.js');
+  currentPattern = fs.existsSync(fallbackPath) ? require(fallbackPath) : require(path.join(__dirname, '..', 'output', 'hypher-id.js'));
+}
+
+const GEN_ID = path.join(__dirname, '..', 'output', 'hypher-id.js');
 const GT_FILE = path.join(__dirname, '..', 'output', 'ground_truth.txt');
 
-const Hypher = require(ENGINE_HYPHER);
-const current = new Hypher(require(CURRENT_ID));
+const current = new Hypher(currentPattern);
 const generated = new Hypher(require(GEN_ID));
 
 const lines = fs.readFileSync(GT_FILE, 'utf8').split(/\r?\n/).filter(Boolean);
