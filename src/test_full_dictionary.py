@@ -12,6 +12,7 @@ This script:
 import re
 import os
 from collections import defaultdict
+from data_paths import ID_DIC, OUTPUT
 
 class PatternHyphenator:
     """Hyphenator using TeX-style patterns."""
@@ -205,9 +206,9 @@ def test_with_exceptions(hyphenator, dictionary, exception_file):
 
 
 def main():
-    pattern_file = os.path.join('output', 'hyph-id.pat.txt')
-    exception_file = os.path.join('output', 'hyph-id.hyp.txt')
-    dict_file = 'id.dic'
+    pattern_file = str(OUTPUT / 'hyph-id.pat.txt')
+    exception_file = str(OUTPUT / 'hyph-id.hyp.txt')
+    dict_file = str(ID_DIC)
     
     if not os.path.exists(pattern_file):
         print(f"Error: Pattern file {pattern_file} not found")

@@ -15,6 +15,7 @@ This is a simpler alternative to patgen when patgen configuration is problematic
 import re
 from collections import defaultdict
 import os
+from data_paths import ID_DIC, OUTPUT
 
 def load_dictionary(filepath):
     """Load hyphenated words from id.dic file."""
@@ -169,8 +170,8 @@ def write_tex_file(patterns, output_file, version="1.0", date="2025/12/20"):
     print(f"Written {len(patterns)} patterns to {output_file}")
 
 def main():
-    input_file = 'id.dic'
-    output_file = 'hyph-id-new.tex'
+    input_file = str(ID_DIC)
+    output_file = str(OUTPUT / 'hyph-id-new.tex')
     
     print("Loading dictionary...")
     words = load_dictionary(input_file)

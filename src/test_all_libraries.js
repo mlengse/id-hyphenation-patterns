@@ -2,6 +2,11 @@
 /**
  * Test Indonesian hyphenation patterns across all 5 libraries
  * Libraries: hyphen, hypher, hyphenation-patterns, Hyphenopoly, tex-hyphen
+ *
+ * Workspace layout (paths are relative to this file, src/):
+ *   ../../../engine/hyphen, ../../../engine/hypher, ../../../engine/Hyphenopoly
+ *   ../../tex-hyphen, ../../hyphenation-patterns
+ *   ../../../data/kbbi-harvester-cdn/hyphenation  (reference data)
  */
 
 const fs = require('fs');
@@ -28,21 +33,21 @@ const testCases = [
     { word: 'pembangunan', expected: 'pem-ba-ngun-an' },
     { word: 'kebahagiaan', expected: 'ke-ba-ha-gi-a-an' },
     { word: 'perpustakaan', expected: 'per-pus-ta-ka-an' },
-    { word: 'demokratisasi', expected: 'de-mok-ra-ti-sa-si' },
+    { word: 'demokratisasi', expected: 'de-mo-kra-ti-sa-si' },
 ];
 
 // Helper to format result
 function formatResult(result, expected) {
     if (result === expected) {
-        return '\x1b[32m✓ PASS\x1b[0m';
+        return '\x1b[32mâœ“ PASS\x1b[0m';
     } else {
-        return `\x1b[31m✗ FAIL\x1b[0m (got: ${result})`;
+        return `\x1b[31mâœ— FAIL\x1b[0m (got: ${result})`;
     }
 }
 
 // Load reference dictionary for validation
 function loadReferenceDictionary() {
-    const dictPath = path.join(__dirname, 'id.dic');
+    const dictPath = path.join(__dirname, '..', '..', '..', 'data', 'kbbi-harvester-cdn', 'hyphenation', 'id.dic');
     const dict = {};
     try {
         const content = fs.readFileSync(dictPath, 'utf-8');
@@ -67,18 +72,18 @@ function checkPatternFiles() {
     console.log('='.repeat(60));
     
     const files = [
-        { path: 'hyphen/patterns/id.js', lib: 'hyphen (JS)' },
-        { path: 'hyphen/tex/hyph-id.tex', lib: 'hyphen (TeX)' },
-        { path: 'hypher/lib/patterns/id.js', lib: 'hypher' },
-        { path: 'hyphenation-patterns/patterns/id.js', lib: 'hyphenation-patterns' },
-        { path: 'tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-id.pat.txt', lib: 'tex-hyphen (pat.txt)' },
-        { path: 'tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-id.tex', lib: 'tex-hyphen (tex)' },
-        { path: 'Hyphenopoly/lang/id/id.wasm', lib: 'Hyphenopoly (WASM)' },
-        { path: 'Hyphenopoly/docs/min/patterns/id.wasm', lib: 'Hyphenopoly (min WASM)' },
-        { path: 'output/hyph-id.tex', lib: 'Output (TeX)' },
-        { path: 'output/hyphen-id.js', lib: 'Output (hyphen.js)' },
-        { path: 'output/hypher-id.js', lib: 'Output (hypher.js)' },
-        { path: 'output/hyphenation-patterns-id.js', lib: 'Output (hyphenation-patterns.js)' },
+        { path: '../../../engine/hyphen/patterns/id.js', lib: 'hyphen (JS)' },
+        { path: '../../../engine/hyphen/tex/hyph-id.tex', lib: 'hyphen (TeX)' },
+        { path: '../../../engine/hypher/lib/patterns/id.js', lib: 'hypher' },
+        { path: '../../hyphenation-patterns/patterns/id.js', lib: 'hyphenation-patterns' },
+        { path: '../../tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-id.pat.txt', lib: 'tex-hyphen (pat.txt)' },
+        { path: '../../tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-id.tex', lib: 'tex-hyphen (tex)' },
+        { path: '../../../engine/Hyphenopoly/lang/id/id.wasm', lib: 'Hyphenopoly (WASM)' },
+        { path: '../../../engine/Hyphenopoly/docs/min/patterns/id.wasm', lib: 'Hyphenopoly (min WASM)' },
+        { path: '../output/hyph-id.tex', lib: 'Output (TeX)' },
+        { path: '../output/hyphen-id.js', lib: 'Output (hyphen.js)' },
+        { path: '../output/hypher-id.js', lib: 'Output (hypher.js)' },
+        { path: '../output/hyphenation-patterns-id.js', lib: 'Output (hyphenation-patterns.js)' },
     ];
     
     let found = 0;
@@ -87,10 +92,10 @@ function checkPatternFiles() {
         if (fs.existsSync(fullPath)) {
             const stats = fs.statSync(fullPath);
             const sizeKB = (stats.size / 1024).toFixed(1);
-            console.log(`  \x1b[32m✓\x1b[0m ${lib.padEnd(35)} ${sizeKB.padStart(8)} KB`);
+            console.log(`  \x1b[32mâœ“\x1b[0m ${lib.padEnd(35)} ${sizeKB.padStart(8)} KB`);
             found++;
         } else {
-            console.log(`  \x1b[31m✗\x1b[0m ${lib.padEnd(35)} NOT FOUND`);
+            console.log(`  \x1b[31mâœ—\x1b[0m ${lib.padEnd(35)} NOT FOUND`);
         }
     }
     
@@ -118,10 +123,10 @@ function validateAgainstDictionary() {
             console.log(`  ${word.padEnd(15)} ${expected.padEnd(20)} ${inDict.padEnd(20)} \x1b[33m? MISSING\x1b[0m`);
             notFound++;
         } else if (inDict === expected) {
-            console.log(`  ${word.padEnd(15)} ${expected.padEnd(20)} ${inDict.padEnd(20)} \x1b[32m✓ PASS\x1b[0m`);
+            console.log(`  ${word.padEnd(15)} ${expected.padEnd(20)} ${inDict.padEnd(20)} \x1b[32mâœ“ PASS\x1b[0m`);
             passed++;
         } else {
-            console.log(`  ${word.padEnd(15)} ${expected.padEnd(20)} ${inDict.padEnd(20)} \x1b[31m✗ DIFF\x1b[0m`);
+            console.log(`  ${word.padEnd(15)} ${expected.padEnd(20)} ${inDict.padEnd(20)} \x1b[31mâœ— DIFF\x1b[0m`);
             failed++;
         }
     }
@@ -137,15 +142,15 @@ function testHyphenationPatterns() {
     console.log('='.repeat(60));
     
     try {
-        const patternPath = path.join(__dirname, 'hyphenation-patterns', 'patterns', 'id.js');
+        const patternPath = path.join(__dirname, '..', '..', 'hyphenation-patterns', 'patterns', 'id.js');
         
         if (!fs.existsSync(patternPath)) {
-            console.log('  \x1b[33m⚠ patterns/id.js not found\x1b[0m');
+            console.log('  \x1b[33mâš  patterns/id.js not found\x1b[0m');
             return { skipped: true };
         }
         
         const pattern = require(patternPath);
-        console.log('  \x1b[32m✓\x1b[0m Pattern file loaded successfully');
+        console.log('  \x1b[32mâœ“\x1b[0m Pattern file loaded successfully');
         console.log(`    - ID: ${pattern.id}`);
         console.log(`    - Left min: ${pattern.leftmin}`);
         console.log(`    - Right min: ${pattern.rightmin}`);
@@ -179,29 +184,29 @@ function testHyphenopoly() {
     console.log('='.repeat(60));
     
     try {
-        const wasmPath = path.join(__dirname, 'Hyphenopoly', 'lang', 'id', 'id.wasm');
-        const minWasmPath = path.join(__dirname, 'Hyphenopoly', 'docs', 'min', 'patterns', 'id.wasm');
-        const jsonPath = path.join(__dirname, 'Hyphenopoly', 'lang', 'id', 'src', 'id.json');
+        const wasmPath = path.join(__dirname, '..', '..', '..', 'engine', 'Hyphenopoly', 'lang', 'id', 'id.wasm');
+        const minWasmPath = path.join(__dirname, '..', '..', '..', 'engine', 'Hyphenopoly', 'docs', 'min', 'patterns', 'id.wasm');
+        const jsonPath = path.join(__dirname, '..', '..', '..', 'engine', 'Hyphenopoly', 'lang', 'id', 'src', 'id.json');
         
         let found = 0;
         
         if (fs.existsSync(wasmPath)) {
             const stats = fs.statSync(wasmPath);
-            console.log(`  \x1b[32m✓\x1b[0m lang/id/id.wasm (${(stats.size / 1024).toFixed(1)} KB)`);
+            console.log(`  \x1b[32mâœ“\x1b[0m lang/id/id.wasm (${(stats.size / 1024).toFixed(1)} KB)`);
             found++;
         } else {
-            console.log('  \x1b[31m✗\x1b[0m lang/id/id.wasm not found');
+            console.log('  \x1b[31mâœ—\x1b[0m lang/id/id.wasm not found');
         }
         
         if (fs.existsSync(minWasmPath)) {
             const stats = fs.statSync(minWasmPath);
-            console.log(`  \x1b[32m✓\x1b[0m docs/min/patterns/id.wasm (${(stats.size / 1024).toFixed(1)} KB)`);
+            console.log(`  \x1b[32mâœ“\x1b[0m docs/min/patterns/id.wasm (${(stats.size / 1024).toFixed(1)} KB)`);
             found++;
         }
         
         if (fs.existsSync(jsonPath)) {
             const stats = fs.statSync(jsonPath);
-            console.log(`  \x1b[32m✓\x1b[0m lang/id/src/id.json (${(stats.size / 1024).toFixed(1)} KB)`);
+            console.log(`  \x1b[32mâœ“\x1b[0m lang/id/src/id.json (${(stats.size / 1024).toFixed(1)} KB)`);
             
             // Parse JSON to get info
             try {
@@ -237,8 +242,8 @@ function testTexHyphen() {
     console.log('='.repeat(60));
     
     const files = [
-        { path: 'tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-id.pat.txt', desc: 'Pattern file (txt)' },
-        { path: 'tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-id.tex', desc: 'Pattern file (tex)' },
+        { path: '../../tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-id.pat.txt', desc: 'Pattern file (txt)' },
+        { path: '../../tex-hyphen/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-id.tex', desc: 'Pattern file (tex)' },
     ];
     
     let found = 0;
@@ -248,12 +253,12 @@ function testTexHyphen() {
             const stats = fs.statSync(fullPath);
             const content = fs.readFileSync(fullPath, 'utf-8');
             const lines = content.split('\n').filter(l => l.trim() && !l.startsWith('%'));
-            console.log(`  \x1b[32m✓\x1b[0m ${desc}`);
+            console.log(`  \x1b[32mâœ“\x1b[0m ${desc}`);
             console.log(`    - Size: ${(stats.size / 1024).toFixed(1)} KB`);
             console.log(`    - Lines (non-comment): ${lines.length}`);
             found++;
         } else {
-            console.log(`  \x1b[31m✗\x1b[0m ${desc} not found`);
+            console.log(`  \x1b[31mâœ—\x1b[0m ${desc} not found`);
         }
     }
     
@@ -269,15 +274,15 @@ function testHypherFormat() {
     console.log('='.repeat(60));
     
     try {
-        const patternPath = path.join(__dirname, 'hypher', 'lib', 'patterns', 'id.js');
+        const patternPath = path.join(__dirname, '..', '..', '..', 'engine', 'hypher', 'lib', 'patterns', 'id.js');
         
         if (!fs.existsSync(patternPath)) {
-            console.log('  \x1b[33m⚠ id.js not found\x1b[0m');
+            console.log('  \x1b[33mâš  id.js not found\x1b[0m');
             return { skipped: true };
         }
         
         const pattern = require(patternPath);
-        console.log('  \x1b[32m✓\x1b[0m Pattern file loaded successfully');
+        console.log('  \x1b[32mâœ“\x1b[0m Pattern file loaded successfully');
         console.log(`    - Left min: ${pattern.leftmin}`);
         console.log(`    - Right min: ${pattern.rightmin}`);
         
@@ -294,7 +299,7 @@ function testHypherFormat() {
         if (pattern.exceptions) {
             if (typeof pattern.exceptions === 'object' && !Array.isArray(pattern.exceptions)) {
                 console.log(`    - Exceptions: ${Object.keys(pattern.exceptions).length} words (object format)`);
-                console.log(`    \x1b[33m⚠\x1b[0m Note: hypher expects exceptions as string with ⁇ separator`);
+                console.log(`    \x1b[33mâš \x1b[0m Note: hypher expects exceptions as string with â‡ separator`);
             } else if (typeof pattern.exceptions === 'string') {
                 console.log(`    - Exceptions: ${pattern.exceptions.split(',').length} words (string format)`);
             }
@@ -309,10 +314,10 @@ function testHypherFormat() {
 
 // Main test runner
 async function main() {
-    console.log('╔════════════════════════════════════════════════════════════╗');
-    console.log('║     Indonesian Hyphenation Pattern Test Suite              ║');
-    console.log('║     Testing all 5 libraries                                ║');
-    console.log('╚════════════════════════════════════════════════════════════╝');
+    console.log('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
+    console.log('â•‘     Indonesian Hyphenation Pattern Test Suite              â•‘');
+    console.log('â•‘     Testing all 5 libraries                                â•‘');
+    console.log('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
     console.log(`\nTest date: ${new Date().toISOString()}`);
     console.log(`Working directory: ${__dirname}`);
     
@@ -325,9 +330,9 @@ async function main() {
     testTexHyphen();
     
     // Summary
-    console.log('\n' + '═'.repeat(60));
+    console.log('\n' + 'â•'.repeat(60));
     console.log('SUMMARY');
-    console.log('═'.repeat(60));
+    console.log('â•'.repeat(60));
     
     console.log(`
   Dictionary Validation:
@@ -351,7 +356,7 @@ async function main() {
     4. Create browser-based test page for full integration
 `);
     
-    console.log('═'.repeat(60));
+    console.log('â•'.repeat(60));
 }
 
 main().catch(console.error);

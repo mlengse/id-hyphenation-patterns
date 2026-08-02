@@ -6,6 +6,7 @@ This will help identify if existing patterns are accurate or need updating.
 
 import re
 import os
+from data_paths import ID_DIC
 
 def load_id_dic(filepath):
     """Load hyphenated words from id.dic as reference."""
@@ -86,7 +87,7 @@ def compare_hyphenation(reference, generated):
 def main():
     # Load reference dictionary
     print("Loading reference dictionary (id.dic)...")
-    reference = load_id_dic('id.dic')
+    reference = load_id_dic(str(ID_DIC))
     print(f"Loaded {len(reference)} words")
     
     # Test sample words against simple algorithm

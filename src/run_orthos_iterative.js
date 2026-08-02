@@ -14,12 +14,15 @@ const path = require('path');
 const readline = require('readline');
 
 // Configuration for Indonesian hyphenation
+const ROOT = path.join(__dirname, '..');
+const DATA = path.join(__dirname, '..', '..', '..', 'data', 'kbbi-harvester-cdn', 'hyphenation');
+
 const CONFIG = {
     leftHyphenMin: 2,
     rightHyphenMin: 2,
-    dictionaryFile: 'id_orthos.dic',
-    emptyPatternFile: 'empty.pat',
-    outputDir: 'output',
+    dictionaryFile: path.join(DATA, 'id_orthos.dic'),
+    emptyPatternFile: path.join(ROOT, 'rules', 'empty.pat'),
+    outputDir: path.join(ROOT, 'output'),
     // orthos fork kini repo terpisah di pattern/orthos (sibling). Override via ORTHOS_PATH bila perlu.
     orthosPath: process.env.ORTHOS_PATH || path.join(__dirname, '..', '..', 'orthos', 'orthos.js'),
     
@@ -64,7 +67,7 @@ async function runLevel(levelConfig, inputPatternFile, outputPatternFile) {
         ];
 
         const orthos = spawn('node', args, {
-            cwd: __dirname,
+            cwd: ROOT,
             stdio: ['pipe', 'pipe', 'pipe']
         });
 

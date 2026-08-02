@@ -5,6 +5,7 @@ Tests a sample of words to check pattern accuracy.
 """
 
 import re
+from data_paths import ID_DIC
 
 def load_id_dic(filepath):
     """Load hyphenated words from id.dic as reference."""
@@ -28,7 +29,7 @@ def main():
     print("=" * 60)
     print()
     
-    reference = load_id_dic('id.dic')
+    reference = load_id_dic(str(ID_DIC))
     print(f"Reference dictionary: {len(reference)} words")
     print()
     

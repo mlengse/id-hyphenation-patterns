@@ -10,10 +10,11 @@ This script:
 
 import re
 import os
+from data_paths import ID_DIC, ID_ORTHOS_DIC
 
 def main():
-    input_file = 'id.dic'
-    output_file = 'id_orthos.dic'
+    input_file = str(ID_DIC)
+    output_file = str(ID_ORTHOS_DIC)
     
     if not os.path.exists(input_file):
         print(f"Error: {input_file} not found")
