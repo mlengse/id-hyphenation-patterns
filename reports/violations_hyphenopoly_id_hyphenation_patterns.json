@@ -1,0 +1,54 @@
+{
+ "configName": "Hyphenopoly + id-hyphenation-patterns",
+ "count": 4,
+ "words": [
+  {
+   "word": "allail",
+   "gt": "al-lail",
+   "pred": "al-la-il",
+   "violations": [
+    {
+     "ci": 4,
+     "pair": "ai",
+     "kind": "diftong"
+    }
+   ]
+  },
+  {
+   "word": "savoifaire",
+   "gt": "savoi-faire",
+   "pred": "sa-vo-ifai-re",
+   "violations": [
+    {
+     "ci": 4,
+     "pair": "oi",
+     "kind": "diftong"
+    }
+   ]
+  },
+  {
+   "word": "savoivivre",
+   "gt": "savoi-vivre",
+   "pred": "sa-vo-i-viv-re",
+   "violations": [
+    {
+     "ci": 4,
+     "pair": "oi",
+     "kind": "diftong"
+    }
+   ]
+  },
+  {
+   "word": "tedeum",
+   "gt": "te-deum",
+   "pred": "te-de-um",
+   "violations": [
+    {
+     "ci": 4,
+     "pair": "eu",
+     "kind": "monoftong"
+    }
+   ]
+  }
+ ]
+}
