@@ -274,7 +274,7 @@ async function runSingleBenchmark(configName, engineName, patternSourceName, get
   }
 
   // Full evaluation run
-  console.log(`  Evaluating ${groundTruth.length.toLocaleString()} words...`);
+  console.log(`  Evaluating ${groundTruth.length.toLocaleString('en-US')} words...`);
   let exactMatches = 0;
   let totalGtHyphens = 0;
   let totalPredHyphens = 0;
@@ -361,13 +361,13 @@ async function runSingleBenchmark(configName, engineName, patternSourceName, get
   fs.writeFileSync(violationsFile, JSON.stringify({ configName, count: violationWords.length, words: violationWords }, null, 1), 'utf8');
 
   console.log(`  ✔ Execution Complete!`);
-  console.log(`    - Exact Word Accuracy: ${exactAccuracyPct.toFixed(2)}% (${exactMatches.toLocaleString()}/${groundTruth.length.toLocaleString()})`);
+  console.log(`    - Exact Word Accuracy: ${exactAccuracyPct.toFixed(2)}% (${exactMatches.toLocaleString('en-US')}/${groundTruth.length.toLocaleString('en-US')})`);
   console.log(`    - Point F1 Score:      ${f1Score.toFixed(4)} (Precision: ${precision.toFixed(4)}, Recall: ${recall.toFixed(4)})`);
-  console.log(`    - Throughput:          ${wordsPerSec.toLocaleString()} words/sec (${totalTimeSec.toFixed(3)}s total)`);
-  console.log(`    - EYD Genuine Violations: ${eydGenuine.total.toLocaleString()} (mono:${eydGenuine.monoftong.toLocaleString()}, dif:${eydGenuine.diftong.toLocaleString()}, dig:${eydGenuine.digraf.toLocaleString()})`);
-  console.log(`    - EYD GT-Consistent:   ${eydGtConsistent.total.toLocaleString()} (mono:${eydGtConsistent.monoftong.toLocaleString()}, dif:${eydGtConsistent.diftong.toLocaleString()}, dig:${eydGtConsistent.digraf.toLocaleString()})`);
-  console.log(`    - Wrong words:         ${wrongWords.length.toLocaleString()} -> ${path.relative(BASE_DIR, wrongWordsFile)}`);
-  console.log(`    - Violation words:     ${violationWords.length.toLocaleString()} -> ${path.relative(BASE_DIR, violationsFile)}`);
+  console.log(`    - Throughput:          ${wordsPerSec.toLocaleString('en-US')} words/sec (${totalTimeSec.toFixed(3)}s total)`);
+  console.log(`    - EYD Genuine Violations: ${eydGenuine.total.toLocaleString('en-US')} (mono:${eydGenuine.monoftong.toLocaleString('en-US')}, dif:${eydGenuine.diftong.toLocaleString('en-US')}, dig:${eydGenuine.digraf.toLocaleString('en-US')})`);
+  console.log(`    - EYD GT-Consistent:   ${eydGtConsistent.total.toLocaleString('en-US')} (mono:${eydGtConsistent.monoftong.toLocaleString('en-US')}, dif:${eydGtConsistent.diftong.toLocaleString('en-US')}, dig:${eydGtConsistent.digraf.toLocaleString('en-US')})`);
+  console.log(`    - Wrong words:         ${wrongWords.length.toLocaleString('en-US')} -> ${path.relative(BASE_DIR, wrongWordsFile)}`);
+  console.log(`    - Violation words:     ${violationWords.length.toLocaleString('en-US')} -> ${path.relative(BASE_DIR, violationsFile)}`);
 
   return {
     configName,
@@ -410,9 +410,9 @@ async function main() {
   console.log('===========================================================');
 
   const { items: groundTruth, malformed } = loadGroundTruth();
-  console.log(`Loaded Ground Truth Dataset: ${groundTruth.length.toLocaleString()} words`);
+  console.log(`Loaded Ground Truth Dataset: ${groundTruth.length.toLocaleString('en-US')} words`);
   if (malformed) {
-    console.log(`Filtered ${malformed.toLocaleString()} malformed entries (leading/trailing hyphens, letter-split abbreviations)`);
+    console.log(`Filtered ${malformed.toLocaleString('en-US')} malformed entries (leading/trailing hyphens, letter-split abbreviations)`);
   }
 
   const stdPatternPath = resolveStandardPatternPath();
@@ -490,7 +490,7 @@ async function main() {
   // Build Markdown Report
   let md = `# Benchmark Results: Indonesian Hyphenation Engines & Pattern Repositories\n\n`;
   md += `**Execution Date**: ${new Date().toISOString().replace('T', ' ').substring(0, 19)} UTC  \n`;
-  md += `**Ground Truth Dataset**: KBBI Ground Truth (\`ground_truth.txt\`) — **${groundTruth.length.toLocaleString()} words**${malformed ? ` (${malformed.toLocaleString()} malformed entries filtered: leading/trailing hyphens, letter-split abbreviations)` : ''}  \n`;
+  md += `**Ground Truth Dataset**: KBBI Ground Truth (\`ground_truth.txt\`) — **${groundTruth.length.toLocaleString('en-US')} words**${malformed ? ` (${malformed.toLocaleString('en-US')} malformed entries filtered: leading/trailing hyphens, letter-split abbreviations)` : ''}  \n`;
   md += `**Engines Evaluated**: \`hypher\`, \`hyphen\`, \`Hyphenopoly\`  \n`;
   md += `**Repositories**: \`github:mlengse/hypher\`, \`github:mlengse/hyphen\`, \`github:mlengse/Hyphenopoly\`, \`github:mlengse/hyphenation-patterns\`, \`github:mlengse/id-hyphenation-patterns\`  \n\n`;
 
@@ -502,7 +502,7 @@ async function main() {
     if (r.error) {
       md += `| **${r.configName}** | ${r.engineName} | ${r.patternSourceName} | *Error* | - | - | - | - | - | ${r.patternFileSizeKB} KB |\n`;
     } else {
-      md += `| **${r.configName}** | \`${r.engineName}\` | ${r.patternSourceName} | **${r.exactAccuracyPct}%** | **${r.f1Score}** | ${r.precision} | ${r.recall} | **${r.wordsPerSec.toLocaleString()}** | ${r.totalTimeSec}s | ${r.patternFileSizeKB} KB |\n`;
+      md += `| **${r.configName}** | \`${r.engineName}\` | ${r.patternSourceName} | **${r.exactAccuracyPct}%** | **${r.f1Score}** | ${r.precision} | ${r.recall} | **${r.wordsPerSec.toLocaleString('en-US')}** | ${r.totalTimeSec}s | ${r.patternFileSizeKB} KB |\n`;
     }
   }
 
@@ -517,7 +517,7 @@ async function main() {
     if (r.error) {
       md += `| **${r.configName}** | - | - | - | *Error* | - |\n`;
     } else {
-      md += `| **${r.configName}** | ${r.eydViolations.monoftong.toLocaleString()} | ${r.eydViolations.diftong.toLocaleString()} | ${r.eydViolations.digraf.toLocaleString()} | **${r.eydViolations.total.toLocaleString()}** | ${r.eydGtConsistent.total.toLocaleString()} |\n`;
+      md += `| **${r.configName}** | ${r.eydViolations.monoftong.toLocaleString('en-US')} | ${r.eydViolations.diftong.toLocaleString('en-US')} | ${r.eydViolations.digraf.toLocaleString('en-US')} | **${r.eydViolations.total.toLocaleString('en-US')}** | ${r.eydGtConsistent.total.toLocaleString('en-US')} |\n`;
     }
   }
 
@@ -530,7 +530,7 @@ async function main() {
     if (r.error) {
       md += `| **${r.configName}** | *Error* | - | - | - | - |\n`;
     } else {
-      md += `| **${r.configName}** | ${r.wrongWordsCount.toLocaleString()} | ${r.samePointsCount.toLocaleString()} | ${r.violationWordsCount.toLocaleString()} | \`${r.wrongWordsFile}\` | \`${r.violationsFile}\` |\n`;
+      md += `| **${r.configName}** | ${r.wrongWordsCount.toLocaleString('en-US')} | ${r.samePointsCount.toLocaleString('en-US')} | ${r.violationWordsCount.toLocaleString('en-US')} | \`${r.wrongWordsFile}\` | \`${r.violationsFile}\` |\n`;
     }
   }
 
