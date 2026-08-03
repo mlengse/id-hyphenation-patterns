@@ -215,7 +215,10 @@ function createHyphenInstance(patternFilePath, isTex = false) {
     }
   }
 
-  const hyphenate = createHyphenator(patternData, { hyphenChar: '-' });
+  // minWordLength must follow the pattern's hyphenmins (left:2/right:2 for id),
+  // NOT the engine default of 5. Without this, 3-4 letter words (e.g. "a-ba",
+  // "bo-i") are silently skipped and accuracy drops ~4.3pt vs hypher.
+  const hyphenate = createHyphenator(patternData, { hyphenChar: '-', minWordLength: 2 });
   return (word) => hyphenate(word);
 }
 

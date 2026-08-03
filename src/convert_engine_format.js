@@ -74,18 +74,23 @@ function convertPatterns() {
 function convertExceptions() {
   const raw = readLines(path.join(ROOT, 'output', 'hyph-id.exceptions.txt'));
   const overrides = readLines(path.join(ROOT, 'rules', 'exceptions_overrides.txt'));
-  const seen = new Set();
   const out = [];
+  const indexByKey = new Map();
+
+  const add = (line) => {
+    if (!/^[a-zêéü-]+$/.test(line)) {
+      return;
+    }
+    const key = line.replace(/-/g, '');
+    if (indexByKey.has(key)) {
+      out.splice(indexByKey.get(key), 1);
+    }
+    indexByKey.set(key, out.length);
+    out.push(line.replace(/-/g, '\u2027'));
+  };
 
   for (const line of [...raw, ...overrides]) {
-    if (!/^[a-zêéü-]+$/.test(line)) {
-      continue;
-    }
-    if (seen.has(line)) {
-      continue;
-    }
-    seen.add(line);
-    out.push(line.replace(/-/g, '\u2027'));
+    add(line);
   }
   return out;
 }

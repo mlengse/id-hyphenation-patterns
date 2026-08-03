@@ -18,3 +18,10 @@ output/   pola hasil generate (hyph-id.*, hyphenopoly-id.json, hypher-id.js, dll
 
 ## Catatan
 Sumber asli di `bahasa_indonesia/pemenggalan` **belum dihapus** (backup) sampai repo ini diverifikasi & di-push.
+
+## Benchmark engine (keadilan perbandingan)
+
+`npm run benchmark` (`src/benchmark_engines_suite.js`) membandingkan `hypher`, `hyphen`, dan `Hyphenopoly` terhadap ground truth KBBI. Persyaratan agar setara:
+
+- **`minWordLength`**: engine `hyphen` default `5`, sehingga kata 2–4 huruf (3.109 entri ground truth) di-skip tanpa pemenggalan → akurasi turun ~4,3 pt. Runner **wajib** men-set `minWordLength: 2` (sama dengan `hyphenmins left:2 right:2` pola id). Lihat komentar di `src/benchmark_engines_suite.js:218`.
+- **Pattern source**: pastikan semua engine memakai pattern yang sama. Konfigurasi `hyphen + hyphenation-patterns` membaca `engine/hyphen/patterns/id.js` (v2.0, tanpa exceptions overrides), sedangkan `hypher + hyphenation-patterns` membaca `pattern/hyphenation-patterns/patterns/id.js` (terbaru, dengan overrides) — beda file, bukan beda engine.

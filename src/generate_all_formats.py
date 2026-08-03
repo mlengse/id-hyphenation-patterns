@@ -26,23 +26,41 @@ def load_orthos_patterns(filepath):
                 patterns.append(pattern)
     return patterns
 
-def load_exceptions(filepath):
-    """Load hyphenated words as exceptions."""
-    exceptions = []
-    if not os.path.exists(filepath):
-        return exceptions
-    with open(filepath, 'r', encoding='utf-8') as f:
-        for line in f:
-            word = line.strip()
-            if not word:
-                continue
-            # Skip entries with spaces (phrases), starting/ending with -
-            if ' ' in word or word.startswith('-') or word.endswith('-'):
-                continue
-            clean = word.replace('-', '').lower()
-            if re.match(r'^[a-zéü]+$', clean):
-                exceptions.append(word.lower())
-    return exceptions
+def load_exceptions(filepath, overrides_filepath=None):
+    """Load hyphenated words as exceptions, merging manual overrides.
+
+    Overrides (rules/exceptions_overrides.txt) always win: exceptions are keyed
+    by their un-hyphenated clean form, and an override replaces the base entry
+    then is appended at the end of the list. This guarantees formats with
+    last-occurrence-wins semantics (TeX \\hyphenation, hypher trie, hyphen
+    markers dict) honor the override.
+    """
+    def read_list(path):
+        out = []
+        if not os.path.exists(path):
+            return out
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f:
+                word = line.strip()
+                if not word:
+                    continue
+                # Skip entries with spaces (phrases), starting/ending with -
+                if ' ' in word or word.startswith('-') or word.endswith('-'):
+                    continue
+                clean = word.replace('-', '').lower()
+                if re.match(r'^[a-zéü]+$', clean):
+                    out.append((clean, word.lower()))
+        return out
+
+    entries = read_list(filepath)
+    if overrides_filepath:
+        entries += read_list(overrides_filepath)
+
+    seen = {}
+    for clean, word in entries:
+        seen.pop(clean, None)
+        seen[clean] = word
+    return list(seen.values())
 
 def write_tex_file(patterns, exceptions, output_file):
     """Write patterns and exceptions in TeX format."""
@@ -55,7 +73,7 @@ def write_tex_file(patterns, exceptions, output_file):
 % language:
 %     name: Bahasa Indonesia, Indonesian  
 %     tag: id
-% version: 3.0 <{date}>
+% version: 3.1 <{date}>   (3.1 = v3.0 + manual overrides merged into exceptions)
 % authors:
 %   - Generated from KBBI dictionary via orthos.js
 % licence:
@@ -140,7 +158,7 @@ def convert_to_hyphen_js(patterns, exceptions, output_file):
     
     # Build exception object (word -> hyphenated)
     exception_obj = {}
-    for word in exceptions[:5000]:  # Limit for JS file size
+    for word in exceptions:
         clean = word.replace('-', '')
         exception_obj[clean] = word
     
@@ -303,7 +321,8 @@ def write_hyphenopoly_json(patterns, exceptions, output_file):
 
 def main():
     pattern_file = os.path.join('output', 'hyph-id.pat.txt')
-    exception_file = os.path.join('output', 'hyph-id.exceptions.txt')  # Minimal exceptions
+    exception_file = os.path.join('output', 'hyph-id.exceptions.txt')  # Orthos pipeline exceptions
+    overrides_file = os.path.join('rules', 'exceptions_overrides.txt')  # Manual overrides (win)
     output_dir = 'output'
     
     os.makedirs(output_dir, exist_ok=True)
@@ -322,10 +341,11 @@ def main():
     patterns = load_orthos_patterns(pattern_file)
     print(f"  Loaded {len(patterns)} patterns")
     
-    # Load exceptions from id.dic
+    # Load exceptions from id.dic (+ manual overrides, which win on conflict)
     print(f"\nLoading exceptions from {exception_file}...")
-    exceptions = load_exceptions(exception_file)
-    print(f"  Loaded {len(exceptions)} exception words")
+    print(f"Merging manual overrides from {overrides_file} (overrides win)...")
+    exceptions = load_exceptions(exception_file, overrides_file)
+    print(f"  Loaded {len(exceptions)} exception words (base + overrides, unique by word)")
     
     print("\n" + "-" * 60)
     print("GENERATING OUTPUT FILES")
