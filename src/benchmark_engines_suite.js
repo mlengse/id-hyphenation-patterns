@@ -237,6 +237,10 @@ async function createHyphenopolyInstance(wasmFilePath) {
     loader: async (file) => {
       return fs.promises.readFile(wasmFilePath);
     },
+    // minWordLength must follow the engine's left/rightmin (2/2 for id),
+    // NOT the Hyphenopoly default of 6. Without this, 3-5 letter words
+    // (e.g. "a-ba", "ra-u") are silently skipped and accuracy collapses.
+    minWordLength: 2,
     require: ['id']
   });
 
